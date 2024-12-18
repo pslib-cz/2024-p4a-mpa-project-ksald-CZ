@@ -13,14 +13,14 @@ class MainActivity : AppCompatActivity() {
 
     private val transactionDescriptions = mutableListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
-    private lateinit var transactionDao: TransactionDao
+    private lateinit var financeDao: FinanceDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val database = FinanceDatabase.getDatabase(this)
-        transactionDao = database.transactionDao()
+        financeDao = database.financeDao()
 
         val addTransactionButton: Button = findViewById(R.id.add_transaction_button)
         val transactionList: ListView = findViewById(R.id.transaction_list)
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadTransactions() {
         lifecycleScope.launch {
-            val transactions = transactionDao.getAllTransactions()
+            val transactions = financeDao.getAllTransactions()
             transactionDescriptions.clear()
             transactionDescriptions.addAll(transactions.map { "${it.description} - $${it.amount}" })
             adapter.notifyDataSetChanged()
